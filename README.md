@@ -4,13 +4,13 @@
 
 Questionario Anhanguera is a web application built with React, React Router, Vite, Bootstrap, and TypeScript.  
 The application supports both light and dark themes with a custom gradient cursor effect in dark mode. It includes the following screens:
-  Tela Principal  
-  Matérias  
-  Editar Matéria  
-  Simulados da Matéria  
-  Editar Simulado  
-  Informações do Simulado  
-  Simulado em Andamento
+  - Tela Principal  
+  - Matérias  
+  - Editar Matéria  
+  - Simulados da Matéria  
+  - Editar Simulado  
+  - Informações do Simulado  
+  - Simulado em Andamento
 
 ## Technologies Used
 

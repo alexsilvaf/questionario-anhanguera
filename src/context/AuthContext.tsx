@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import api from '../api';
 import { LoginModel } from '../models/LoginModel';
 import autenticationService from '../services/autenticationService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (data: LoginModel) => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -13,6 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Verifica se há uma sessão ativa ao carregar o componente
   useEffect(() => {
@@ -22,6 +23,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       })
       .catch(() => {
         setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -39,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await api.post('/logout');
+      await autenticationService.logout();
     } catch (error) {
       console.error('Erro ao deslogar:', error);
     }
@@ -47,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

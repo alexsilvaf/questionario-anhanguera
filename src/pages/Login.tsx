@@ -7,8 +7,8 @@ import ThemeToggle from '../components/ThemeToggle';
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('admin@mail.com');
+    const [password, setPassword] = useState('administrador');
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {

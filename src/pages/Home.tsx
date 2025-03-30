@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import courseService from '../services/courseService';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Home = () => {
   const { logout } = useAuth();
@@ -22,7 +23,10 @@ const Home = () => {
 
   return (
     <div>
-      <h2>Home</h2>
+      <header className='w-100 d-flex justify-content-end'>
+        <ThemeToggle />
+      </header>
+      
       <p>Bem-vindo ao sistema!</p>
         <div>
             <h2>Lista de Cursos</h2>

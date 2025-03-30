@@ -6,7 +6,12 @@ import { JSX } from 'react';
 import Register from './pages/Register';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
   return isAuthenticated ? children : <Navigate to="/login" />;
 }
 

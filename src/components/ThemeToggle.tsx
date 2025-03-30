@@ -7,7 +7,12 @@ const ThemeToggle = () => {
     <button
       onClick={toggleTheme}
       className="btn p-0"
-      style={{ color: 'var(--text-primary)' }}
+      style={{
+        color: 'var(--text-primary)',
+        outline: 'none',
+        boxShadow: 'none',
+        border: 'none',
+      }}
     >
       <i className="material-icons">{theme === 'light' ? 'dark_mode' : 'light_mode'}</i>
     </button>

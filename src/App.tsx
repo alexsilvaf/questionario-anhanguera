@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import { useAuth } from './context/AuthContext';
 import { JSX } from 'react';
+import Register from './pages/Register';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
@@ -14,6 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
       </Routes>
     </Router>

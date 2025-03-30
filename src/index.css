@@ -65,3 +65,24 @@ body {
 .app-input:focus {
   border-color: #ff7300;
 }
+
+select.app-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: transparent;
+  color: var(--text-primary);
+  padding-right: 2rem; /* espaço pra ícone se quiser no futuro */
+  cursor: pointer;
+}
+
+select.app-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+select.app-input option {
+  background-color: var(--card-color);
+  color: var(--text-primary);
+}

@@ -1,7 +1,7 @@
-// src/context/AuthContext.tsx
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import api from '../api';
 import { LoginModel } from '../models/LoginModel';
+import autenticationService from '../services/autenticationService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Verifica se há uma sessão ativa ao carregar o componente
   useEffect(() => {
-    api.get('/me')
+    autenticationService.getCurrentUser()
       .then(() => {
         setIsAuthenticated(true);
       })
@@ -27,9 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async ({ email, password }: LoginModel) => {
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await autenticationService.login({ email, password });
       if (response.status === 200) {
-        // O backend deve definir o cookie HTTP-only com o token
         setIsAuthenticated(true);
       }
     } catch (error) {

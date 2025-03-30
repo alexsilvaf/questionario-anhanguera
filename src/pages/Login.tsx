@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './css/Login.css'; // Certifique-se de ter esse arquivo com os estilos personalizados
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -69,10 +69,10 @@ const Login = () => {
                 </form>
 
                 <p className="signup-text text-center mt-3">
-                    Não possui uma conta? <a href="#">Registrar-se</a>
-                    <div className='d-flex justify-content-center mt-4'>
+                    Não possui uma conta? <Link to="/register">Registrar-se</Link>
+                    <span className='d-flex justify-content-center mt-4'>
                         <ThemeToggle />
-                    </div>
+                    </span>
                 </p>
             </div>
         </div>

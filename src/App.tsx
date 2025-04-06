@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import { useAuth } from './context/AuthContext';
 import { JSX } from 'react';
 import Register from './pages/Register';
+import Materias from './pages/Materias';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/materias" element={<PrivateRoute><Materias /></PrivateRoute>} />
       </Routes>
     </Router>
   );

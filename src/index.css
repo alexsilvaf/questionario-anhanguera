@@ -12,7 +12,8 @@
 
 :root {
   /* Light Mode Colors */
-  --background-color: #ffffff;
+  --background-primary-color: #ffffff;
+  --background-secondary-color: #f3f3f3;
   --card-color: #f5f5f5;
   --text-primary: #121212;
   --text-secondary: #4f4f4f;
@@ -23,7 +24,8 @@
 
 .dark {
   /* Dark Mode Colors */
-  --background-color: #121212;
+  --background-primary-color: #121212;
+  --background-secondary-color: #1a1a1a;
   --card-color: #1e1e1e;
   --text-primary: #ffffff;
   --text-secondary: #bbbbbb;
@@ -36,7 +38,7 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background-color: var(--background-color);
+  background-color: var(--background-primary-color);
   color: var(--text-primary);
 }
 
@@ -85,4 +87,8 @@ select.app-input:focus {
 select.app-input option {
   background-color: var(--card-color);
   color: var(--text-primary);
+}
+
+.primary-color {
+  color: var(--primary-color) !important;
 }

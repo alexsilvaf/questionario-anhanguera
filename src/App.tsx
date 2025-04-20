@@ -8,6 +8,16 @@ import Materias from './pages/Materias';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 
+function PublicRoute({ children }: { children: JSX.Element }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
+  return isAuthenticated ? <Navigate to="/" /> : children;
+}
+
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -22,10 +32,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/materias" element={<PrivateRoute><Materias /></PrivateRoute>} />
       </Routes>

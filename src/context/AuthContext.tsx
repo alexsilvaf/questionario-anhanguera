@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { LoginModel } from '../models/LoginModel';
-import autenticationService from '../services/autenticationService';
+import authenticationService from '../services/autenticationService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Verifica se há uma sessão ativa ao carregar o componente
   useEffect(() => {
-    autenticationService.getCurrentUser()
+    authenticationService.getCurrentUser()
       .then(() => {
         setIsAuthenticated(true);
       })
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async ({ email, password }: LoginModel) => {
     try {
-      const response = await autenticationService.login({ email, password });
+      const response = await authenticationService.login({ email, password });
       if (response.status === 200) {
         setIsAuthenticated(true);
       }
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await autenticationService.logout();
+      await authenticationService.logout();
     } catch (error) {
       console.error('Erro ao deslogar:', error);
     }

@@ -1,6 +1,7 @@
 import http from './http';
 import { LoginModel } from '../models/LoginModel';
 import { RegisterModel } from '../models/RegisterModel';
+import { AxiosResponse } from 'axios';
 
 export const login = (data: LoginModel) => {
     return http.post('/auth/login', data, { withCredentials: true });
@@ -18,11 +19,36 @@ export const getCurrentUser = () => {
     return http.get('/auth/me', { withCredentials: true });
 };
 
-const autenticationService = {
+export const sendPasswordResetEmail = (email: string): Promise<string> => {
+    return http
+    .post<string, AxiosResponse<string>>(
+        '/auth/forgot-password', 
+        { email }, 
+        { withCredentials: true }
+    )
+    .then(res => res.data);
+}
+
+export const resetPassword = (
+    token: string,
+    newPassword: string
+  ): Promise<string> => {
+    return http
+      .post<string, AxiosResponse<string>>(
+        '/auth/reset-password',
+        { token, password: newPassword },
+        { withCredentials: true }
+      )
+      .then(res => res.data);
+  };
+
+const authenticationService = {
     login,
     register,
     logout,
     getCurrentUser,
+    sendPasswordResetEmail,
+    resetPassword,
 };
 
-export default autenticationService;
+export default authenticationService;

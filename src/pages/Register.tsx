@@ -4,7 +4,7 @@ import './css/Login.css';
 import ThemeToggle from '../components/ThemeToggle';
 import AppDropdown from '../components/AppDropdown';
 import { RegisterModel } from '../models/RegisterModel';
-import autenticationService from '../services/autenticationService';
+import authenticationService from '../services/autenticationService';
 import courseService from '../services/courseService'; // ⬅️ novo
 import CpfInput from '../components/CpfInput';
 import { CourseModel } from '../models/CourseModel';
@@ -72,7 +72,7 @@ const Register = () => {
         };
 
         try {
-            await autenticationService.register(payload);
+            await authenticationService.register(payload);
             navigate('/');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Erro ao registrar.');

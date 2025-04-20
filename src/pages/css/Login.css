@@ -70,7 +70,7 @@
     text-decoration: underline;
 }
 
-.app-password-input-wrapper {
+.app-password-input-wrapper, .app-input-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -82,7 +82,7 @@
     gap: 8px;
   }
 
-.app-password-input {
+.app-password-input, .app-email-input {
     flex: 1;
     background: transparent;
     border: none;
@@ -93,17 +93,31 @@
     margin: 0;
 }
 
-.forgot-password-inside {
+.forgot-password-link {
     color: var(--primary-color);
     font-size: 14px;
     text-decoration: none;
     white-space: nowrap;
 }
 
-.forgot-password-inside:hover {
+.forgot-password-link:hover {
     text-decoration: underline;
 }
 
-.app-password-input-wrapper:focus-within {
+.app-password-input-wrapper:focus-within, .app-input-wrapper:focus-within {
     border-color: #ff7300;
 }
+
+.input-icon {
+    margin-right: 8px;
+    color: var(--text-secondary);
+}
+
+.password-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+}
+  

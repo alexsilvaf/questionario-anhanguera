@@ -1,0 +1,71 @@
+/* ManageGroupsPermissions.css */
+.manage-groups-content {
+  padding: 2rem;
+  background: var(--background-secondary-color);
+  border-radius: 8px;
+}
+
+.mg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mg-header h2 {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+}
+
+.mg-new-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mg-new-btn:hover {
+  background-color: var(--hover-color);
+}
+
+.mg-table-wrapper {
+  overflow-x: auto;
+}
+
+.mg-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-color);
+}
+
+.mg-table th,
+.mg-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.mg-table thead th {
+  font-weight: 500;
+  background: var(--background-primary-color);
+}
+
+.mg-table tbody tr:hover {
+  background: var(--background-secondary-color);
+}
+
+.mg-subtable {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+.mg-subtable th,
+.mg-subtable td {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}

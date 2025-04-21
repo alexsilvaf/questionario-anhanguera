@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Materias from './pages/Materias';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import ManageGroups from './pages/ManageGroups';
+import ManagePermissions from './pages/ManagePermissions';
 
 function PublicRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -39,6 +41,8 @@ function App() {
         
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/materias" element={<PrivateRoute><Materias /></PrivateRoute>} />
+        <Route path="/grupos" element={<PrivateRoute><ManageGroups /></PrivateRoute>} />
+        <Route path="/grupos/edit/:id" element={<PrivateRoute><ManagePermissions /></PrivateRoute>} />
       </Routes>
     </Router>
   );

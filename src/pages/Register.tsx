@@ -4,7 +4,7 @@ import './css/Login.css';
 import ThemeToggle from '../components/ThemeToggle';
 import AppDropdown from '../components/AppDropdown';
 import { RegisterModel } from '../models/RegisterModel';
-import authenticationService from '../services/autenticationService';
+import authenticationService from '../services/authenticationService';
 import courseService from '../services/courseService'; // ⬅️ novo
 import CpfInput from '../components/CpfInput';
 import { CourseModel } from '../models/CourseModel';

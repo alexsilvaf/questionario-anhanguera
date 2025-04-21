@@ -14,7 +14,7 @@ const ThemeToggle = () => {
         border: 'none',
       }}
     >
-      <i className="material-icons">{theme === 'light' ? 'dark_mode' : 'light_mode'}</i>
+      <i className="material-icons">{theme === 'light' ? 'light_mode' : 'dark_mode'}</i>
     </button>
   );
 };

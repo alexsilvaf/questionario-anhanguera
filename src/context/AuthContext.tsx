@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { LoginModel } from '../models/LoginModel';
-import authenticationService from '../services/autenticationService';
+import authenticationService from '../services/authenticationService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Verifica se há uma sessão ativa ao carregar o componente
   useEffect(() => {
     authenticationService.getCurrentUser()
       .then(() => {

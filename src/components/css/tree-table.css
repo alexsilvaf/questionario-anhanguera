@@ -1,0 +1,60 @@
+/* tree-table.css */
+
+.tt-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tt-table thead {
+  background-color: var(--background-secondary-color);
+}
+
+.tt-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tt-table tbody tr {
+  cursor: default;
+  transition: background-color 0.2s ease;
+}
+
+.tt-table tbody tr:hover {
+  background-color: var(--background-secondary-color);
+}
+
+.tt-table td {
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tt-expand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.tt-expand-icon:hover {
+  color: var(--text-primary);
+}
+
+.tt-table td:first-child,
+.tt-table th:first-child {
+  width: 2rem;
+  padding-left: 1rem;
+}
+
+.tt-table tr:last-child td {
+  border-bottom: none;
+}

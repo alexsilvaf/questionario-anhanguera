@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
-import authenticationService from '../services/autenticationService';
+import authenticationService from '../services/authenticationService';
 
 const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -33,11 +33,9 @@ const ResetPassword: React.FC = () => {
     }
     setLoading(true);
     try {
-      // Supondo que o serviço retorne { message: string }
       const response = await authenticationService.resetPassword(token, password);
       const msg = response || 'Senha redefinida com sucesso.';
       setSuccess(msg);
-      // Redireciona após breve delay
       setTimeout(() => navigate('/login'), 3000);
     } catch (err: any) {
       console.error('Erro ao redefinir senha', err);

@@ -64,7 +64,7 @@ const ManageGroups: React.FC = () => {
                     <h2>Grupos</h2>
                     <NavLink
                         to={'./new'}>
-                        <button className="mg-new-btn">Novo Grupo</button>
+                        <i title="Novo Grupo" className="material-icons primary-color me-3">group_add</i>
                     </NavLink>
                 </div>
 
@@ -89,7 +89,7 @@ const ManageGroups: React.FC = () => {
                                                 <td className="text-end">
                                                     <NavLink
                                                         to={'./edit/' + g.id}>
-                                                        <i className="material-icons primary-color me-3">edit</i>
+                                                        <i title="Editar" className="material-icons primary-color me-3">edit</i>
                                                     </NavLink>
                                                     {g.id !== 1 && (
                                                         <i

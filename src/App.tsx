@@ -43,6 +43,7 @@ function App() {
         <Route path="/materias" element={<PrivateRoute><Materias /></PrivateRoute>} />
         <Route path="/grupos" element={<PrivateRoute><ManageGroups /></PrivateRoute>} />
         <Route path="/grupos/edit/:id" element={<PrivateRoute><ManagePermissions /></PrivateRoute>} />
+        <Route path="/grupos/new" element={<PrivateRoute><ManagePermissions /></PrivateRoute>} />
       </Routes>
     </Router>
   );

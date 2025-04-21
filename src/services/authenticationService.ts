@@ -72,6 +72,25 @@ export const findPermissionsByGroup = (id: number): Promise<UserPermissionModel[
         .then(res => res.data);
 }
 
+export const createGroup = (group: UserGroupCreateUpdateModel): Promise<void> => {
+    return http
+        .post<void, AxiosResponse<void>>(
+            '/auth/group/create',
+            group,
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
+
+export const deleteGroup = (id: number): Promise<void> => {
+    return http
+        .delete<void, AxiosResponse<void>>(
+            '/auth/group/delete/' + id,
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
+
 export const updateGroupPermissions = (group: UserGroupCreateUpdateModel): Promise<void> => {
     return http
         .put<void, AxiosResponse<void>>(
@@ -93,6 +112,8 @@ const authenticationService = {
     findAllPermissions,
     findPermissionsByGroup,
     updateGroupPermissions,
+    createGroup,
+    deleteGroup,
 };
 
 export default authenticationService;

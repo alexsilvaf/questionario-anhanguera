@@ -1,7 +1,6 @@
 // src/pages/ManagePermissions.tsx
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, NavLink } from 'react-router-dom'
-import Layout from '../components/Layout'
 
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView'
 import { TreeItem } from '@mui/x-tree-view/TreeItem'
@@ -28,7 +27,7 @@ export default function ManagePermissions() {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
   const [groupName, setGroupName] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string|null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [expandedItems, setExpandedItems] = useState<string[]>([])
 
   useEffect(() => {
@@ -137,72 +136,70 @@ export default function ManagePermissions() {
   }
 
   return (
-    <Layout>
-      <Box className="manage-permissions-panel" p={3}>
-        <Box 
-        display="flex" 
-        alignItems="center" 
-        justifyContent="space-between" 
+    <Box className="manage-permissions-panel" p={3}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
         mb={2}
-        >
-          <div className="d-flex align-items-center">
+      >
+        <div className="d-flex align-items-center">
           <NavLink to="/grupos">
             <ChevronLeftIcon fontSize="large" className='me-2' color="primary" />
           </NavLink>
           <Typography variant="h6">
             {isNew ? 'Criar Grupo' : 'Editar Permissões do Grupo'}
           </Typography>
-          </div>
-        </Box>
-
-        {isNew && (
-          <Box mb={2}>
-            <TextField
-              fullWidth
-              label="Nome do Grupo"
-              value={groupName}
-              onChange={e => setGroupName(e.target.value)}
-            />
-          </Box>
-        )}
-
-        {loading && <Typography>Carregando permissões...</Typography>}
-        {error && 
-          <Typography color="error" mb={2}>{error}</Typography>
-        }
-
-        {!loading && !error && (
-          <SimpleTreeView
-            defaultExpandedItems={expandedItems}
-            expandedItems={expandedItems}
-            slots={{
-              expandIcon:   () => null,
-              collapseIcon: () => null,
-            }}
-            sx={{
-              maxHeight: isNew ? '60vh' :  '70vh',
-              overflowY: 'auto',
-              width: '100%',
-              '::-webkit-scrollbar': { width: '8px' },
-              '::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: 1 }
-            }}
-          >
-            {treeData.map(node => renderTree(node))}
-          </SimpleTreeView>
-        )}
-
-        <Box textAlign="right" mt={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            className="text-white"
-            onClick={handleSave}
-            disabled={loading || (isNew && !groupName.trim()) || groupId == 1}
-          >
-            {isNew ? 'Criar' : 'Salvar'}
-          </Button>
-        </Box>
+        </div>
       </Box>
-    </Layout>
+
+      {isNew && (
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Nome do Grupo"
+            value={groupName}
+            onChange={e => setGroupName(e.target.value)}
+          />
+        </Box>
+      )}
+
+      {loading && <Typography>Carregando permissões...</Typography>}
+      {error &&
+        <Typography color="error" mb={2}>{error}</Typography>
+      }
+
+      {!loading && !error && (
+        <SimpleTreeView
+          defaultExpandedItems={expandedItems}
+          expandedItems={expandedItems}
+          slots={{
+            expandIcon: () => null,
+            collapseIcon: () => null,
+          }}
+          sx={{
+            maxHeight: isNew ? '60vh' : '70vh',
+            overflowY: 'auto',
+            width: '100%',
+            '::-webkit-scrollbar': { width: '8px' },
+            '::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: 1 }
+          }}
+        >
+          {treeData.map(node => renderTree(node))}
+        </SimpleTreeView>
+      )}
+
+      <Box textAlign="right" mt={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          className="text-white"
+          onClick={handleSave}
+          disabled={loading || (isNew && !groupName.trim()) || groupId == 1}
+        >
+          {isNew ? 'Criar' : 'Salvar'}
+        </Button>
+      </Box>
+    </Box>
   )
 }

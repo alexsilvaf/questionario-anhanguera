@@ -1,36 +1,33 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import { useAuth } from './context/AuthContext';
-import { JSX } from 'react';
-import Register from './pages/Register';
-import Materias from './pages/Materias';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import ManageGroups from './pages/ManageGroups';
-import ManagePermissions from './pages/ManagePermissions';
+// src/App.tsx
+import { JSX } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './context/AuthContext'
+
+import Login from './pages/Login'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import Register from './pages/Register'
+import NotFound from './pages/NotFound'
+
+import Layout from './components/Layout'
+import Home from './pages/Home'
+import Materias from './pages/Materias'
+import ManageGroups from './pages/ManageGroups'
+import ManagePermissions from './pages/ManagePermissions'
 
 function PublicRoute({ children }: { children: JSX.Element }) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
-
-  return isAuthenticated ? <Navigate to="/" /> : children;
+  const { isAuthenticated, isLoading } = useAuth()
+  if (isLoading) return <div>Carregando...</div>
+  return isAuthenticated ? <Navigate to="/" replace /> : children
 }
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
-
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  const { isAuthenticated, isLoading } = useAuth()
+  if (isLoading) return <div>Carregando...</div>
+  return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
-function App() {
+export default function App() {
   return (
     <Router>
       <Routes>
@@ -38,15 +35,24 @@ function App() {
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-        
-        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="/materias" element={<PrivateRoute><Materias /></PrivateRoute>} />
-        <Route path="/grupos" element={<PrivateRoute><ManageGroups /></PrivateRoute>} />
-        <Route path="/grupos/edit/:id" element={<PrivateRoute><ManagePermissions /></PrivateRoute>} />
-        <Route path="/grupos/new" element={<PrivateRoute><ManagePermissions /></PrivateRoute>} />
+
+        <Route path="/" element={
+          <PrivateRoute>
+            <Layout />
+          </PrivateRoute>
+        }>
+          <Route index element={<Home />} />
+          <Route path="materias" element={<Materias />} />
+
+          <Route path="grupos">
+            <Route index element={<ManageGroups />} />
+            <Route path="new" element={<ManagePermissions />} />
+            <Route path="edit/:id" element={<ManagePermissions />} />
+          </Route>
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
-  );
+  )
 }
-
-export default App;

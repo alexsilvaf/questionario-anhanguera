@@ -1,10 +1,9 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import Layout from '../components/Layout';
+import { NavLink } from 'react-router-dom';
+import { UserGroupModel } from '../models/UserGroupModel';
 import authenticationService from '../services/authenticationService';
 import './css/ManageGroups.css';
-import { UserGroupModel } from '../models/UserGroupModel';
-import { NavLink } from 'react-router-dom';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
 const ManageGroups: React.FC = () => {
     const [groups, setGroups] = useState<UserGroupModel[]>([]);
@@ -59,7 +58,7 @@ const ManageGroups: React.FC = () => {
     }
 
     return (
-        <Layout>
+        <>
             <div className="manage-groups-content">
                 <div className="mg-header">
                     <h2>Grupos</h2>
@@ -146,7 +145,7 @@ const ManageGroups: React.FC = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Layout>
+        </>
     );
 };
 

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import courseService from '../services/courseService';
-import Layout from '../components/Layout';
 
 const Home = () => {
   const [courses, setCourses] = useState([]);
@@ -17,17 +16,15 @@ const Home = () => {
 
   return (
     <div>
-      <Layout>
-        <p>Bem-vindo ao sistema!</p>
-        <div>
-          <h2>Lista de Cursos</h2>
-          <ul>
-            {courses.map((course: any) => (
-              <li key={course.id}>{course.name}</li>
-            ))}
-          </ul>
-        </div>
-      </Layout>
+      <p>Bem-vindo ao sistema!</p>
+      <div>
+        <h2>Lista de Cursos</h2>
+        <ul>
+          {courses.map((course: any) => (
+            <li key={course.id}>{course.name}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

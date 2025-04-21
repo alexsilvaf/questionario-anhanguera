@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const navItems = [
@@ -25,10 +25,15 @@ const NavItemsBottom = [
 export default function Nav() {
 
   const { logout } = useAuth();
-  
+  const navigate = useNavigate()
+
   const handleLogout = async () => {
-    await logout();
-  };
+    try {
+      await logout()
+    } finally {
+      navigate('/login', { replace: true })
+    }
+  }
   
   return (
     <>

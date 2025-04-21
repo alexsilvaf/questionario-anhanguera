@@ -1,20 +1,19 @@
-import Header from './Header';
-import Nav from './Nav';
-import './css/layout.css';
+// src/components/Layout.tsx
+import { Outlet } from 'react-router-dom'
+import Header from './Header'
+import Nav from './Nav'
+import './css/layout.css'
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
-export default function Layout({ children }: LayoutProps) {
+export default function Layout() {
   return (
     <div className="layout">
       <Nav />
       <div className="main-section">
         <Header />
-        <main className="layout-content">{children}</main>
+        <main className="layout-content">
+          <Outlet />
+        </main>
       </div>
     </div>
-  );
+  )
 }
-

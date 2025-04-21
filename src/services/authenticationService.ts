@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 import { UserGroupModel } from '../models/UserGroupModel';
 import { UserPermissionModel } from '../models/UserPermissionModel';
 import { UserGroupCreateUpdateModel } from '../models/UserGroupCreateUpdateModel';
+import { UserAuthoritiesModel } from '../models/UserAuthoritiesModel';
 
 export const login = (data: LoginModel) => {
     return http.post('/auth/login', data, { withCredentials: true });
@@ -18,8 +19,9 @@ export const logout = () => {
     return http.post('/auth/logout', {}, { withCredentials: true });
 };
 
-export const getCurrentUser = () => {
-    return http.get('/auth/me', { withCredentials: true });
+export const getCurrentUser = (): Promise<UserAuthoritiesModel> => {
+    return http.get('/auth/me', { withCredentials: true })
+    .then(res => res.data);
 };
 
 export const sendPasswordResetEmail = (email: string): Promise<string> => {

@@ -1,30 +1,30 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const navItems = [
-  {
-    to: "/",
-    icon: "dashboard",
-    label: "Dashboard",
-  },
-  {
-    to: "/materias",
-    icon: "menu_book",
-    label: "Matérias",
-  },
+interface NavItem {
+  to: string;
+  icon: string;
+  label: string;
+  requiredAuth?: string;    // <-- autoridade necessária (opcional)
+}
+
+const navItems: NavItem[] = [
+  { to: "/", icon: "dashboard", label: "Dashboard" },
+  { to: "/materias", icon: "menu_book", label: "Matérias" },
 ];
 
-const NavItemsBottom = [
+const navItemsBottom: NavItem[] = [
   {
     to: "/grupos",
     icon: "groups",
     label: "Grupos e Permissões",
+    requiredAuth: "Estudante360Permissions.Group"
   },
 ];
 
 export default function Nav() {
 
-  const { logout } = useAuth();
+  const { logout, loggedUser } = useAuth();
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -34,6 +34,16 @@ export default function Nav() {
       navigate('/login', { replace: true })
     }
   }
+
+  const topItems = navItems.filter(item => {
+    if (!item.requiredAuth) return true;
+    return loggedUser?.authorities?.some(a => a.authority.includes(''+item.requiredAuth));
+  });
+  
+  const bottomItems = navItemsBottom.filter(item => {
+    if (!item.requiredAuth) return true;
+    return loggedUser?.authorities?.some(a => a.authority.includes(''+item.requiredAuth));
+  });
   
   return (
     <>
@@ -45,7 +55,7 @@ export default function Nav() {
 
         <nav className="d-flex flex-column h-100">
           <ul className="ps-0">
-            {navItems.map(({ to, icon, label }) => (
+            {topItems.map(({ to, icon, label }) => (
               <li key={to} className="d-flex align-items-center mb-1">
                 <NavLink
                   to={to}
@@ -60,7 +70,7 @@ export default function Nav() {
             ))}
           </ul>
           <ul className="ps-0 mt-auto">
-            {NavItemsBottom.map(({ to, icon, label }) => (
+            {bottomItems.map(({ to, icon, label }) => (
               <li key={to} className="d-flex align-items-center mb-1">
                 <NavLink
                   to={to}

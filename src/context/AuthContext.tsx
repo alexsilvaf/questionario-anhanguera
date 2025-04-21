@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { LoginModel } from '../models/LoginModel';
 import authenticationService from '../services/authenticationService';
+import { UserAuthoritiesModel } from '../models/UserAuthoritiesModel';
 
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
+  loggedUser: UserAuthoritiesModel | null;
   login: (data: LoginModel) => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -12,15 +14,18 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [loggedUser, setLoggedUser] = useState<UserAuthoritiesModel | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     authenticationService.getCurrentUser()
-      .then(() => {
+      .then(u => {
+        setLoggedUser(u);
         setIsAuthenticated(true);
       })
       .catch(() => {
+        setLoggedUser(null);
         setIsAuthenticated(false);
       })
       .finally(() => {
@@ -32,6 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await authenticationService.login({ email, password });
       if (response.status === 200) {
+        const u = await authenticationService.getCurrentUser()
+        setLoggedUser(u)
         setIsAuthenticated(true);
       }
     } catch (error) {
@@ -45,12 +52,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await authenticationService.logout();
     } catch (error) {
       console.error('Erro ao deslogar:', error);
+    } finally {
+      setLoggedUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
     }
-    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, loggedUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

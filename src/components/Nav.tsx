@@ -15,10 +15,10 @@ const navItems: NavItem[] = [
 
 const navItemsBottom: NavItem[] = [
   {
-    to: "/grupos",
-    icon: "groups",
-    label: "Grupos e Permissões",
-    requiredAuth: "Estudante360Permissions.Group"
+    to: "/usuarios",
+    icon: "group",
+    label: "Gerenciar Usuários",
+    requiredAuth: "Estudante360Permissions.User.findAll",
   },
 ];
 

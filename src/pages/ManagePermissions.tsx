@@ -15,7 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import authenticationService from '../services/authenticationService'
 import { UserPermissionModel } from '../models/UserPermissionModel'
 import { UserGroupCreateUpdateModel } from '../models/UserGroupCreateUpdateModel'
-import './css/ManagePermissions.css'
+import './css/ManageUsers.css';
 
 export default function ManagePermissions() {
   const { id } = useParams<{ id: string }>()

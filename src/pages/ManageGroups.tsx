@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserGroupModel } from '../models/UserGroupModel';
 import authenticationService from '../services/authenticationService';
-import './css/ManageGroups.css';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import './css/ManageUsers.css';
 
 const ManageGroups: React.FC = () => {
     const [groups, setGroups] = useState<UserGroupModel[]>([]);
@@ -59,68 +60,73 @@ const ManageGroups: React.FC = () => {
 
     return (
         <>
-            <div className="manage-groups-content">
+            <div>
                 <div className="mg-header">
-                    <h2>Grupos</h2>
-                    <NavLink
-                        to={'./new'}>
-                        <i title="Novo Grupo" className="material-icons primary-color me-3">group_add</i>
+                <div className="d-flex align-items-center ">
+                    <NavLink to="/usuarios">
+                        <ChevronLeftIcon fontSize="large" className='me-2' color="primary" />
                     </NavLink>
+                    <h2 className="mb-0">Gerenciar Grupos</h2>
                 </div>
-
-                {loading && <div className="mg-loading">Carregando grupos...</div>}
-                {error && <div className="alert alert-danger">{error}</div>}
-
-                {!loading && !error && (
-                    <div className="mg-table-wrapper">
-                        <table className="mg-table">
-                            <thead>
-                                <tr>
-                                    <th>Grupo</th>
-                                    <th />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {groups.map((g) => {
-                                    return (
-                                        <React.Fragment key={g.id}>
-                                            <tr className="mg-row">
-                                                <td>{g.name}</td>
-                                                <td className="text-end">
-                                                    <NavLink
-                                                        to={'./edit/' + g.id}>
-                                                        <i title="Editar" className="material-icons primary-color me-3">edit</i>
-                                                    </NavLink>
-                                                    {g.id !== 1 && (
-                                                        <i
-                                                            className="material-icons text-danger"
-                                                            style={{ cursor: 'pointer' }}
-                                                            title="Excluir"
-                                                            onClick={() => askDeleteGroup(g.id)}
-                                                        >
-                                                            delete
-                                                        </i>
-                                                    )}
-                                                    {g.id == 1 && (
-                                                        <i
-                                                            className="material-icons text-muted"
-                                                            style={{ cursor: 'not-allowed' }}
-                                                            title="Grupo padrão não pode ser excluído"
-                                                        >
-                                                            delete
-                                                        </i>
-                                                    )}
-                                                </td>
-
-                                            </tr>
-                                        </React.Fragment>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                <NavLink
+                    to={'./new'}>
+                    <i title="Novo Grupo" className="material-icons primary-color me-3">group_add</i>
+                </NavLink>
             </div>
+
+            {loading && <div className="mg-loading">Carregando grupos...</div>}
+            {error && <div className="alert alert-danger">{error}</div>}
+
+            {!loading && !error && (
+                <div className="mg-table-wrapper">
+                    <table className="mg-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th />
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {groups.map((g) => {
+                                return (
+                                    <React.Fragment key={g.id}>
+                                        <tr className="mg-row">
+                                            <td>{g.name}</td>
+                                            <td className="text-end">
+                                                <NavLink
+                                                    to={'./edit/' + g.id}>
+                                                    <i title="Editar" className="material-icons primary-color me-3">edit</i>
+                                                </NavLink>
+                                                {g.id !== 1 && (
+                                                    <i
+                                                        className="material-icons text-danger"
+                                                        style={{ cursor: 'pointer' }}
+                                                        title="Excluir"
+                                                        onClick={() => askDeleteGroup(g.id)}
+                                                    >
+                                                        delete
+                                                    </i>
+                                                )}
+                                                {g.id == 1 && (
+                                                    <i
+                                                        className="material-icons text-muted"
+                                                        style={{ cursor: 'not-allowed' }}
+                                                        title="Grupo padrão não pode ser excluído"
+                                                    >
+                                                        delete
+                                                    </i>
+                                                )}
+                                            </td>
+
+                                        </tr>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div >
 
             <Dialog
                 open={confirmOpen}

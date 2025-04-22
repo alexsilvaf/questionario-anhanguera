@@ -15,6 +15,7 @@ import Materias from './pages/Materias'
 import ManageGroups from './pages/ManageGroups'
 import ManagePermissions from './pages/ManagePermissions'
 import PermissionRoute from './components/PermissionRoute'
+import ManageUsers from './pages/ManageUsers'
 
 function PublicRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -59,6 +60,7 @@ export default function App() {
   const securedRoutes: SecuredConfig[] = [
     { index: true, required: '', element: <Home /> },
     { path: 'materias', required: '', element: <Materias /> },
+    { path: 'usuarios', required: 'Estudante360Permissions.User.findAll', element: <ManageUsers /> },
     { path: 'grupos', required: 'Estudante360Permissions.Group', element: <ManageGroups /> },
     { path: 'grupos/new', required: 'Estudante360Permissions.Group.create', element: <ManagePermissions /> },
     { path: 'grupos/edit/:id', required: 'Estudante360Permissions.Group.update', element: <ManagePermissions /> },

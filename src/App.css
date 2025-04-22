@@ -2,13 +2,6 @@ nav {
   padding: 1rem;
 }
 
-.header {
-  background: var(--nav-background);
-  border-bottom: 1px solid var(--nav-border);
-  position: relative;
-  overflow: hidden;
-}
-
 nav ul {
   display: flex;
   gap: 1rem;

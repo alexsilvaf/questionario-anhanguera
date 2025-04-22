@@ -1,9 +1,4 @@
-/* ManageGroupsPermissions.css */
-.manage-groups-content {
-  padding: 2rem;
-  background: var(--background-secondary-color);
-  border-radius: 8px;
-}
+/* ManageUsers.css */
 
 .mg-header {
   display: flex;
@@ -68,4 +63,27 @@
 .mg-subtable td {
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
+}
+
+.class-select {
+  border: none;
+  background: var(--background-primary-color);
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+  outline: none;
+  cursor: pointer !important;
+}
+
+.class-select::-ms-expand { display: none; }
+
+.manage-permissions-panel {
+  background: var(--card-color);
+  border-radius: 8px;
+  padding: 2rem;
 }

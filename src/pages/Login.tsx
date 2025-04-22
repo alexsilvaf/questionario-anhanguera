@@ -100,7 +100,7 @@ const Login = () => {
                 </form>
 
                 <p className="signup-text text-center mt-3">
-                    Não possui convite? Solicite ao seu coordenador.
+                    Não possui convite? Solicite aos líderes da sua turma.
                 </p>
                 <div className="d-flex justify-content-center mt-4">
                     <ThemeToggle />

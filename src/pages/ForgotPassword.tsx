@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
-import ThemeToggle from '../components/ThemeToggle';
+import ThemeToggle from '../components/ui-components/ThemeToggle';
 import authenticationService from '../services/authenticationService';
 import './css/Login.css';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
-import ThemeToggle from '../components/ThemeToggle';
+import ThemeToggle from '../components/ui-components/ThemeToggle';
 import authenticationService from '../services/authenticationService';
 
 const ResetPassword: React.FC = () => {

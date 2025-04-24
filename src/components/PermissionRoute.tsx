@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 interface PermissionRouteProps {
-  required: string      // ex: "Estudante360Permissions.Group.findAll"
+  required: string
   children: React.ReactNode
 }
 
@@ -19,5 +19,5 @@ export default function PermissionRoute({ required, children }: PermissionRouteP
 
   return has
     ? <>{children}</>
-    : <Navigate to="/404" replace />  // ou para uma página de "Acesso negado"
+    : <Navigate to="/404" replace />
 }

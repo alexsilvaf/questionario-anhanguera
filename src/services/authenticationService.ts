@@ -48,10 +48,10 @@ export const resetPassword = (
         .then(res => res.data);
 };
 
-export const findAllUsers = (): Promise<ListUserModel[]> => {
+export const findByClassName = (className: string): Promise<ListUserModel[]> => {
     return http
         .get<UserGroupModel[], AxiosResponse<ListUserModel[]>>(
-            '/user/findall',
+            '/user/findbyclassname/' + className,
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -129,7 +129,7 @@ const authenticationService = {
     getCurrentUser,
     sendPasswordResetEmail,
     resetPassword,
-    findAllUsers,
+    findByClassName,
     findAllGroups,
     findAllPermissions,
     findPermissionsByGroup,

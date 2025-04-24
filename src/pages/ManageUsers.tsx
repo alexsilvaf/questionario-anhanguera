@@ -1,16 +1,16 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ListUserModel } from '../models/ListUserModel';
 import authenticationService from '../services/authenticationService';
 import { useAuth } from '../context/AuthContext';
 import './css/ManageUsers.css';
+import ClassDropdown from '../components/ui-components/ClassDropdown';
 
 const ManageUsers: React.FC = () => {
-    const { loggedUser, isLoading } = useAuth();
-    const classes = loggedUser?.classList ?? [];
-
+    const { isLoading } = useAuth();
     const [selectedClass, setSelectedClass] = useState<string>('');
+
     const [users, setUsers] = useState<ListUserModel[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -18,17 +18,12 @@ const ManageUsers: React.FC = () => {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [UserToDelete, setUserToDelete] = useState<number | null>(null);
 
-
     useEffect(() => {
-        if (classes.length > 0 && !selectedClass) {
-            setSelectedClass(classes[0]);
-        }
-    }, [classes, selectedClass]);
+        if (!selectedClass) return;
 
-    useEffect(() => {
         setLoading(true);
         authenticationService
-            .findAllUsers()
+            .findByClassName(selectedClass)
             .then((data) => setUsers(data))
             .catch((err) => {
                 console.error('Erro ao carregar grupos', err);
@@ -37,18 +32,9 @@ const ManageUsers: React.FC = () => {
                 );
             })
             .finally(() => setLoading(false));
-    }, []);
+    }, [selectedClass]);
 
     if (isLoading) return null;
-
-    // monta a lista filtrada
-    const filteredUsers = useMemo(
-        () =>
-            selectedClass
-                ? users.filter(u => u.classList.includes(selectedClass))
-                : users,
-        [users, selectedClass]
-    );
 
     const askDeleteUser = (id: number) => {
         setUserToDelete(id)
@@ -86,21 +72,9 @@ const ManageUsers: React.FC = () => {
                 <div className="mg-header">
                     <h2>Usuários</h2>
                     <div className="d-flex align-items-center">
-                        {classes.length > 1 ? (
-                            <select
-                                className="class-select me-3 mb-1"
-                                value={selectedClass}
-                                onChange={e => setSelectedClass(e.target.value)}
-                            >
-                                {classes.map(c => (
-                                    <option className='cursor-pointer' key={c} value={c}>
-                                        {c}
-                                    </option>
-                                ))}
-                            </select>
-                        ) : (
-                            <span className="me-3 mb-1">{classes[0] || '–'}</span>
-                        )}
+                        <ClassDropdown
+                            onSelectClass={setSelectedClass}
+                        />
                         <NavLink
                             to={'./new'}>
                             <i title="Novo Grupo" className="material-icons primary-color me-3">add_link</i>
@@ -117,7 +91,7 @@ const ManageUsers: React.FC = () => {
 
                 {!loading && !error && (
                     <>
-                        {filteredUsers.length === 0 ? (
+                        {users.length === 0 ? (
                             <p>Nenhum usuário encontrado para “{selectedClass}”.</p>
                         ) : (
                             <div className="mg-table-wrapper">
@@ -130,7 +104,7 @@ const ManageUsers: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredUsers.map((g) => {
+                                        {users.map((g) => {
                                             return (
                                                 <React.Fragment key={g.id}>
                                                     <tr className="mg-row">

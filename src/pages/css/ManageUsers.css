@@ -65,23 +65,6 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.class-select {
-  border: none;
-  background: var(--background-primary-color);
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  color: inherit;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: none;
-  outline: none;
-  cursor: pointer !important;
-}
-
-.class-select::-ms-expand { display: none; }
-
 .manage-permissions-panel {
   background: var(--card-color);
   border-radius: 8px;

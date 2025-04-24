@@ -18,7 +18,7 @@ const navItemsBottom: NavItem[] = [
     to: "/usuarios",
     icon: "group",
     label: "Gerenciar Usuários",
-    requiredAuth: "Estudante360Permissions.User.findAll",
+    requiredAuth: "Estudante360Permissions.User.findByClassName",
   },
 ];
 

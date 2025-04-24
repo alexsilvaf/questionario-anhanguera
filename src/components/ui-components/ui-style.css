@@ -1,4 +1,4 @@
-/* tree-table.css */
+/* ui-style.css */
 
 .tt-table {
   width: 100%;
@@ -58,3 +58,20 @@
 .tt-table tr:last-child td {
   border-bottom: none;
 }
+
+.class-select {
+  border: none;
+  background: var(--background-primary-color);
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+  outline: none;
+  cursor: pointer !important;
+}
+
+.class-select::-ms-expand { display: none; }

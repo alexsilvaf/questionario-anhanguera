@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail } from 'lucide-react';
 import './css/Login.css';
-import ThemeToggle from '../components/ThemeToggle';
+import ThemeToggle from '../components/ui-components/ThemeToggle';
 
 const Login = () => {
     const { login } = useAuth();

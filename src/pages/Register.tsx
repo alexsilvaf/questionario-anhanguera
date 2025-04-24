@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/Login.css';
-import ThemeToggle from '../components/ThemeToggle';
-import AppDropdown from '../components/AppDropdown';
+import ThemeToggle from '../components/ui-components/ThemeToggle';
+import AppDropdown from '../components/ui-components/AppDropdown';
 import { RegisterModel } from '../models/RegisterModel';
 import authenticationService from '../services/authenticationService';
 import courseService from '../services/courseService'; // ⬅️ novo
-import CpfInput from '../components/CpfInput';
+import CpfInput from '../components/ui-components/CpfInput';
 import { CourseModel } from '../models/CourseModel';
 
 const Register = () => {

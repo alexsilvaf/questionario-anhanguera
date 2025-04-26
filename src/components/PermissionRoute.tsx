@@ -15,7 +15,7 @@ export default function PermissionRoute({ required, children }: PermissionRouteP
     return <div>Carregando...</div>
   }
 
-  const has = loggedUser?.authorities?.some(a => a.authority.includes(required))
+  const has = (required.length == 0) || loggedUser?.authorities?.some(a => a.authority.includes(required))
 
   return has
     ? <>{children}</>

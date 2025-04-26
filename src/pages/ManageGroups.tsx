@@ -113,19 +113,21 @@ export default function ManageGroups() {
         <>
             <div className="mg-header">
                 <div className="d-flex align-items-center">
-                    <NavLink to="/">
+                    <NavLink to="/usuarios">
                         <ChevronLeftIcon fontSize="large" color="primary" />
                     </NavLink>
                     <h2 className="mb-0 ms-2">Gerenciar Grupos</h2>
                 </div>
-                <Button
-                    onClick={handleNew}
-                    title="Novo Grupo"
-                    color="primary"
-                    startIcon={<GroupAddIcon />}
-                >
-                    Novo Grupo
-                </Button>
+                {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.Group.create") && (
+                    <Button
+                        onClick={handleNew}
+                        title="Novo Grupo"
+                        color="primary"
+                        startIcon={<GroupAddIcon />}
+                    >
+                        Novo Grupo
+                    </Button>
+                )}
             </div>
 
             {loading && <div>Carregando grupos...</div>}
@@ -141,27 +143,35 @@ export default function ManageGroups() {
                             </tr>
                         </thead>
                         <tbody>
-                            {groups.map(g => (
-                                <tr key={g.id} className="mg-row">
-                                    <td>{g.name}</td>
-                                    <td className="text-end">
-                                        <IconButton
-                                            onClick={() => handleEdit(g)}
-                                            size="small"
-                                            title="Editar"
-                                        >
-                                            <EditIcon color="primary" />
-                                        </IconButton>
-                                        {
-                                            loggedUser?.authorities?.some(a => a.authority == "Estudante360Permissions.Group.delete")
-                                            && (
+                            {groups.length > 0 ? (
+                                groups.map(g => (
+                                    <tr key={g.id} className="mg-row">
+                                        <td>{g.name}</td>
+                                        <td className="text-end">
+                                            {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.Group.update") && (
+                                                <IconButton
+                                                    onClick={() => handleEdit(g)}
+                                                    size="small"
+                                                    title="Editar"
+                                                >
+                                                    <EditIcon color="primary" />
+                                                </IconButton>
+                                            )}
+                                            {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.Group.delete") && (
                                                 <IconButton title="Excluir" onClick={() => askDelete(g.id)}>
                                                     <DeleteIcon color="error" />
                                                 </IconButton>
                                             )}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={2} className="text-center">
+                                        Nenhum grupo encontrado.
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -171,9 +181,15 @@ export default function ManageGroups() {
                 <DialogTitle>Confirmar exclusão</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Deseja realmente excluir o grupo <strong>
-                            {groups.find(g => g.id === groupToDelete)?.name}
-                        </strong>? Esta ação não poderá ser desfeita.
+                        {groups.length > 0 && groupToDelete != null ? (
+                            <>
+                                Deseja realmente excluir o grupo <strong>
+                                    {groups.find(g => g.id === groupToDelete)?.name || '(Grupo não encontrado)'}
+                                </strong>? Esta ação não poderá ser desfeita.
+                            </>
+                        ) : (
+                            "Nenhum grupo selecionado para exclusão."
+                        )}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -182,6 +198,7 @@ export default function ManageGroups() {
                         onClick={handleConfirmDelete}
                         color="error"
                         variant="contained"
+                        disabled={!groupToDelete}
                     >
                         Excluir
                     </Button>
@@ -194,7 +211,7 @@ export default function ManageGroups() {
                 onSave={handleSaveGroup}
                 group={editingGroup}
                 allPermissions={allPermissions}
-                allGroups={groups.filter(g => g.id !== 1)}
+                allGroups={groups.length > 0 ? groups.filter(g => g.id !== 1) : []}
             />
         </>
     )

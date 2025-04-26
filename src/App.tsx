@@ -59,7 +59,7 @@ export default function App() {
   const securedRoutes: SecuredConfig[] = [
     { index: true, required: '', element: <Home /> },
     { path: 'materias', required: '', element: <Materias /> },
-    { path: 'usuarios', required: 'Estudante360Permissions.User.update', element: <ManageUsers /> },
+    { path: 'usuarios', required: 'Estudante360Permissions.User.findByClassName', element: <ManageUsers /> },
     { path: 'grupos', required: 'Estudante360Permissions.Group', element: <ManageGroups /> },
   ]
 

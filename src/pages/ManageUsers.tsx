@@ -8,7 +8,7 @@ import './css/ManageUsers.css';
 import ClassDropdown from '../components/ui-components/ClassDropdown';
 
 const ManageUsers: React.FC = () => {
-    const { isLoading } = useAuth();
+    const { isLoading, loggedUser } = useAuth();
     const [selectedClass, setSelectedClass] = useState<string>('');
 
     const [users, setUsers] = useState<ListUserModel[]>([]);
@@ -75,14 +75,18 @@ const ManageUsers: React.FC = () => {
                         <ClassDropdown
                             onSelectClass={setSelectedClass}
                         />
-                        <NavLink
-                            to={'./new'}>
-                            <i title="Novo Grupo" className="material-icons primary-color me-3">add_link</i>
-                        </NavLink>
-                        <NavLink
-                            to={'/grupos'}>
-                            <i title="Novo Grupo" className="material-icons primary-color me-3">groups</i>
-                        </NavLink>
+                        {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.create") && (
+                            <NavLink
+                                to={'./new'}>
+                                <i title="Novo Grupo" className="material-icons primary-color me-3">add_link</i>
+                            </NavLink>
+                        )}
+                        {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.Group.findAll") && (
+                            <NavLink
+                                to={'/grupos'}>
+                                <i title="Novo Grupo" className="material-icons primary-color me-3">groups</i>
+                            </NavLink>
+                        )}
                     </div>
                 </div>
 
@@ -104,28 +108,32 @@ const ManageUsers: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {users.map((g) => {
+                                        {users.map((u) => {
                                             return (
-                                                <React.Fragment key={g.id}>
+                                                <React.Fragment key={u.id}>
                                                     <tr className="mg-row">
-                                                        <td>{g.firstName + ' ' + g.lastName}</td>
-                                                        <td>{g.groupName}</td>
+                                                        <td>{u.firstName + ' ' + u.lastName}</td>
+                                                        <td>{u.groupName}</td>
                                                         <td className="text-end">
-                                                            <NavLink
-                                                                to={'./edit/' + g.id}>
-                                                                <i title="Editar" className="material-icons primary-color me-3">edit</i>
-                                                            </NavLink>
-                                                            {g.id !== 1 && (
-                                                                <i
-                                                                    className="material-icons text-danger"
-                                                                    style={{ cursor: 'pointer' }}
-                                                                    title="Excluir"
-                                                                    onClick={() => askDeleteUser(g.id)}
-                                                                >
-                                                                    delete
-                                                                </i>
+                                                            {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.update") && (
+                                                                <NavLink
+                                                                    to={'./edit/' + u.id}>
+                                                                    <i title="Editar" className="material-icons primary-color me-3">edit</i>
+                                                                </NavLink>
                                                             )}
-                                                            {g.id == 1 && (
+                                                            {u.canDelete && (
+                                                                loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.delete") && (
+                                                                    <i
+                                                                        className="material-icons text-danger"
+                                                                        style={{ cursor: 'pointer' }}
+                                                                        title="Excluir"
+                                                                        onClick={() => askDeleteUser(u.id)}
+                                                                    >
+                                                                        delete
+                                                                    </i>
+                                                                )
+                                                            )}
+                                                            {!u.canDelete && (
                                                                 <i
                                                                     className="material-icons text-muted"
                                                                     style={{ cursor: 'not-allowed' }}

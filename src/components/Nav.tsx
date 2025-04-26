@@ -9,8 +9,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { to: "/", icon: "dashboard", label: "Dashboard" },
-  { to: "/materias", icon: "menu_book", label: "Matérias" },
+  {
+    to: "/", 
+    icon: "dashboard", 
+    label: "Dashboard"
+  },
+  {
+    to: "/materias",
+    icon: "menu_book",
+    label: "Matérias"
+  },
 ];
 
 const navItemsBottom: NavItem[] = [
@@ -18,7 +26,7 @@ const navItemsBottom: NavItem[] = [
     to: "/usuarios",
     icon: "group",
     label: "Gerenciar Usuários",
-    requiredAuth: "Estudante360Permissions.User.update",
+    requiredAuth: "Estudante360Permissions.User.findByClassName",
   },
 ];
 

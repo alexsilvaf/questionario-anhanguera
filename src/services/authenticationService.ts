@@ -84,10 +84,10 @@ export const findAllPermissions = (): Promise<UserPermissionModel[]> => {
         .then(res => res.data);
 }
 
-export const findPermissionsByGroup = (id: number): Promise<UserPermissionModel[]> => {
+export const findGroupById = (id: number): Promise<UserGroupModel> => {
     return http
-        .get<UserPermissionModel[], AxiosResponse<UserPermissionModel[]>>(
-            '/auth/permission/findbygroup/' + id,
+        .get<UserGroupModel, AxiosResponse<UserGroupModel>>(
+            '/auth/group/findbyid/' + id,
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -103,20 +103,20 @@ export const createGroup = (group: UserGroupCreateUpdateModel): Promise<void> =>
         .then(res => res.data);
 }
 
-export const deleteGroup = (id: number): Promise<void> => {
+export const updateGroup = (group: UserGroupCreateUpdateModel): Promise<void> => {
     return http
-        .delete<void, AxiosResponse<void>>(
-            '/auth/group/delete/' + id,
+        .put<void, AxiosResponse<void>>(
+            '/auth/group/update/' + group.groupId,
+            group,
             { withCredentials: true }
         )
         .then(res => res.data);
 }
 
-export const updateGroupPermissions = (group: UserGroupCreateUpdateModel): Promise<void> => {
+export const deleteGroup = (id: number): Promise<void> => {
     return http
-        .put<void, AxiosResponse<void>>(
-            '/auth/group/update/' + group.groupId,
-            group,
+        .delete<void, AxiosResponse<void>>(
+            '/auth/group/delete/' + id,
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -132,8 +132,8 @@ const authenticationService = {
     findByClassName,
     findAllGroups,
     findAllPermissions,
-    findPermissionsByGroup,
-    updateGroupPermissions,
+    findGroupById,
+    updateGroup,
     createGroup,
     deleteGroup,
     deleteUser,

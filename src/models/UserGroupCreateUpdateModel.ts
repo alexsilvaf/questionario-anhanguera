@@ -1,5 +1,6 @@
 export interface UserGroupCreateUpdateModel {
-  groupId: number;
-  name?: string;
+  groupId?: number;
+  name: string;
   permissionIdList: number[];
+  managedGroupIdList: number[];
 }

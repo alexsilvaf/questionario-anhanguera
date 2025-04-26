@@ -1,80 +1,134 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { UserGroupModel } from '../models/UserGroupModel';
-import authenticationService from '../services/authenticationService';
+// src/pages/ManageGroups.tsx
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+} from '@mui/material'
+import { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import { UserGroupModel } from '../models/UserGroupModel'
+import authenticationService from '../services/authenticationService'
+import { UserGroupCreateUpdateModel } from '../models/UserGroupCreateUpdateModel'
+import ModalGroup from './ModalGroup'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import './css/ManageUsers.css';
+import { useAuth } from '../context/AuthContext'
 
-const ManageGroups: React.FC = () => {
-    const [groups, setGroups] = useState<UserGroupModel[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+export default function ManageGroups() {
+    const { loggedUser } = useAuth()
+    const [groups, setGroups] = useState<UserGroupModel[]>([])
+    const [allPermissions, setAllPermissions] = useState<any[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [groupToDelete, setGroupToDelete] = useState<number | null>(null)
 
-    useEffect(() => {
-        setLoading(true);
-        authenticationService
-            .findAllGroups()
-            .then((data) => setGroups(data))
-            .catch((err) => {
-                console.error('Erro ao carregar grupos', err);
-                setError(
-                    err.response?.data?.message || err.message || 'Erro ao carregar grupos.'
-                );
-            })
-            .finally(() => setLoading(false));
-    }, []);
+    const [formOpen, setFormOpen] = useState(false)
+    const [editingGroup, setEditingGroup] = useState<UserGroupModel | undefined>(undefined)
 
-    const askDeleteGroup = (id: number) => {
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    async function loadData() {
+        setLoading(true)
+        try {
+            const [grs, perms] = await Promise.all([
+                authenticationService.findAllGroups(),
+                authenticationService.findAllPermissions()
+            ])
+            setGroups(grs)
+            setAllPermissions(perms)
+        } catch (err: any) {
+            console.error(err)
+            setError(err.message || 'Erro ao carregar dados.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    function askDelete(id: number) {
         setGroupToDelete(id)
         setConfirmOpen(true)
     }
 
-    const handleConfirmDelete = () => {
+    async function handleConfirmDelete() {
         if (groupToDelete == null) return
         setConfirmOpen(false)
         setLoading(true)
-
-        authenticationService
-            .deleteGroup(groupToDelete)
-            .then(() => {
-                setGroups(prev => prev.filter(g => g.id !== groupToDelete))
-            })
-            .catch(err => {
-                console.error('Erro ao deletar grupo', err)
-                setError(err.response?.data?.message || err.message || 'Erro ao deletar grupo.')
-            })
-            .finally(() => {
-                setLoading(false)
-                setGroupToDelete(null)
-            })
+        try {
+            await authenticationService.deleteGroup(groupToDelete)
+            setGroups(prev => prev.filter(g => g.id !== groupToDelete))
+        } catch (err: any) {
+            console.error(err)
+            setError(err.message || 'Erro ao excluir.')
+        } finally {
+            setLoading(false)
+            setGroupToDelete(null)
+        }
     }
 
-    const handleCancelDelete = () => {
+    function handleCancelDelete() {
         setConfirmOpen(false)
         setGroupToDelete(null)
     }
 
+    function handleNew() {
+        setEditingGroup(undefined)
+        setFormOpen(true)
+    }
+
+    function handleEdit(g: UserGroupModel) {
+        setEditingGroup(g)
+        setFormOpen(true)
+    }
+
+    async function handleSaveGroup(data: UserGroupCreateUpdateModel) {
+        setFormOpen(false)
+        setLoading(true)
+        try {
+            if (data.groupId) {
+                await authenticationService.updateGroup(data)
+            } else {
+                await authenticationService.createGroup(data)
+            }
+            await loadData()
+        } catch (err: any) {
+            console.error(err)
+            setError(err.message || 'Erro ao salvar.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <>
-            <div>
-                <div className="mg-header">
-                <div className="d-flex align-items-center ">
-                    <NavLink to="/usuarios">
-                        <ChevronLeftIcon fontSize="large" className='me-2' color="primary" />
+            <div className="mg-header">
+                <div className="d-flex align-items-center">
+                    <NavLink to="/">
+                        <ChevronLeftIcon fontSize="large" color="primary" />
                     </NavLink>
-                    <h2 className="mb-0">Gerenciar Grupos</h2>
+                    <h2 className="mb-0 ms-2">Gerenciar Grupos</h2>
                 </div>
-                <NavLink
-                    to={'./new'}>
-                    <i title="Novo Grupo" className="material-icons primary-color me-3">group_add</i>
-                </NavLink>
+                <Button
+                    onClick={handleNew}
+                    title="Novo Grupo"
+                    color="primary"
+                    startIcon={<GroupAddIcon />}
+                >
+                    Novo Grupo
+                </Button>
             </div>
 
-            {loading && <div className="mg-loading">Carregando grupos...</div>}
+            {loading && <div>Carregando grupos...</div>}
             {error && <div className="alert alert-danger">{error}</div>}
 
             {!loading && !error && (
@@ -83,76 +137,65 @@ const ManageGroups: React.FC = () => {
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th />
+                                <th style={{ width: 120 }} />
                             </tr>
                         </thead>
                         <tbody>
-                            {groups.map((g) => {
-                                return (
-                                    <React.Fragment key={g.id}>
-                                        <tr className="mg-row">
-                                            <td>{g.name}</td>
-                                            <td className="text-end">
-                                                <NavLink
-                                                    to={'./edit/' + g.id}>
-                                                    <i title="Editar" className="material-icons primary-color me-3">edit</i>
-                                                </NavLink>
-                                                {g.id !== 1 && (
-                                                    <i
-                                                        className="material-icons text-danger"
-                                                        style={{ cursor: 'pointer' }}
-                                                        title="Excluir"
-                                                        onClick={() => askDeleteGroup(g.id)}
-                                                    >
-                                                        delete
-                                                    </i>
-                                                )}
-                                                {g.id == 1 && (
-                                                    <i
-                                                        className="material-icons text-muted"
-                                                        style={{ cursor: 'not-allowed' }}
-                                                        title="Grupo padrão não pode ser excluído"
-                                                    >
-                                                        delete
-                                                    </i>
-                                                )}
-                                            </td>
-
-                                        </tr>
-                                    </React.Fragment>
-                                );
-                            })}
+                            {groups.map(g => (
+                                <tr key={g.id} className="mg-row">
+                                    <td>{g.name}</td>
+                                    <td className="text-end">
+                                        <IconButton
+                                            onClick={() => handleEdit(g)}
+                                            size="small"
+                                            title="Editar"
+                                        >
+                                            <EditIcon color="primary" />
+                                        </IconButton>
+                                        {
+                                            loggedUser?.authorities?.some(a => a.authority == "Estudante360Permissions.Group.delete")
+                                            && (
+                                                <IconButton title="Excluir" onClick={() => askDelete(g.id)}>
+                                                    <DeleteIcon color="error" />
+                                                </IconButton>
+                                            )}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             )}
-        </div >
 
-            <Dialog
-                open={confirmOpen}
-                onClose={handleCancelDelete}
-            >
+            <Dialog open={confirmOpen} onClose={handleCancelDelete}>
                 <DialogTitle>Confirmar exclusão</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Tem certeza que deseja excluir o grupo{" "}
-                        <strong>{
-                            groups.find(g => g.id === groupToDelete)?.name || ''
-                        }</strong>?
-                        Esta ação não pode ser desfeita.
+                        Deseja realmente excluir o grupo <strong>
+                            {groups.find(g => g.id === groupToDelete)?.name}
+                        </strong>? Esta ação não poderá ser desfeita.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCancelDelete} color="inherit">
-                        Cancelar
-                    </Button>
-                    <Button onClick={handleConfirmDelete} color="error" variant="contained" autoFocus>
+                    <Button onClick={handleCancelDelete}>Cancelar</Button>
+                    <Button
+                        onClick={handleConfirmDelete}
+                        color="error"
+                        variant="contained"
+                    >
                         Excluir
                     </Button>
                 </DialogActions>
             </Dialog>
-        </>
-    );
-};
 
-export default ManageGroups;
+            <ModalGroup
+                open={formOpen}
+                onClose={() => setFormOpen(false)}
+                onSave={handleSaveGroup}
+                group={editingGroup}
+                allPermissions={allPermissions}
+                allGroups={groups.filter(g => g.id !== 1)}
+            />
+        </>
+    )
+}

@@ -1,6 +1,7 @@
 // src/pages/ManageGroups.tsx
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import {
+    Alert,
     Button,
     Dialog,
     DialogActions,
@@ -8,6 +9,7 @@ import {
     DialogContentText,
     DialogTitle,
     IconButton,
+    Snackbar,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -30,6 +32,9 @@ export default function ManageGroups() {
 
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [groupToDelete, setGroupToDelete] = useState<number | null>(null)
+
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const [snackbarMsg, setSnackbarMsg] = useState('')
 
     const [formOpen, setFormOpen] = useState(false)
     const [editingGroup, setEditingGroup] = useState<UserGroupModel | undefined>(undefined)
@@ -69,7 +74,12 @@ export default function ManageGroups() {
             setGroups(prev => prev.filter(g => g.id !== groupToDelete))
         } catch (err: any) {
             console.error(err)
-            setError(err.message || 'Erro ao excluir.')
+            const msg =
+                err.response?.data?.message
+                || err.message
+                || 'Erro ao excluir.'
+            setSnackbarMsg(msg)
+            setSnackbarOpen(true)
         } finally {
             setLoading(false)
             setGroupToDelete(null)
@@ -133,7 +143,7 @@ export default function ManageGroups() {
             {loading && <div>Carregando grupos...</div>}
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {!loading && !error && (
+            {!loading && (
                 <div className="mg-table-wrapper">
                     <table className="mg-table">
                         <thead>
@@ -176,6 +186,22 @@ export default function ManageGroups() {
                     </table>
                 </div>
             )}
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={() => setSnackbarOpen(false)}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
 
             <Dialog open={confirmOpen} onClose={handleCancelDelete}>
                 <DialogTitle>Confirmar exclusão</DialogTitle>

@@ -24,6 +24,7 @@ import GroupsIcon from '@mui/icons-material/Groups'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import './css/ManageUsers.css'
+import ModalLinkUser from './ModalLinkUser'
 
 const ManageUsers: React.FC = () => {
     const { isLoading, loggedUser } = useAuth()
@@ -33,13 +34,14 @@ const ManageUsers: React.FC = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const [snackbarErrorOpen, setSnackbarErrorOpen] = useState(false)
+    const [snackbarSuccessOpen, setSnackbarSuccessOpen] = useState(false)
     const [snackbarMsg, setSnackbarMsg] = useState('')
 
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [userToDelete, setUserToDelete] = useState<number | null>(null)
 
-    // Novo estado para o modal de criação/edição
+    const [linkModalOpen, setLinkModalOpen] = useState(false)
     const [userModalOpen, setUserModalOpen] = useState(false)
     const [editingUser, setEditingUser] = useState<UserDataModel | undefined>(undefined)
     const [allGroups, setAllGroups] = useState<UserGroupModel[]>([])
@@ -93,7 +95,7 @@ const ManageUsers: React.FC = () => {
                 console.error(err)
                 const msg = err.response?.data?.message || err.message || 'Erro ao excluir.'
                 setSnackbarMsg(msg)
-                setSnackbarOpen(true)
+                setSnackbarErrorOpen(true)
             })
             .finally(() => {
                 setLoading(false)
@@ -103,7 +105,7 @@ const ManageUsers: React.FC = () => {
 
     const handleNewUser = () => {
         setEditingUser(undefined)
-        setUserModalOpen(true)
+        setLinkModalOpen(true)
     }
 
     const handleEditUser = (id: number) => {
@@ -118,18 +120,29 @@ const ManageUsers: React.FC = () => {
                 console.error('Erro ao buscar usuário para edição', err)
                 const msg = err.response?.data?.message || err.message || 'Erro ao carregar usuário.'
                 setSnackbarMsg(msg)
-                setSnackbarOpen(true)
+                setSnackbarErrorOpen(true)
             })
             .finally(() => setLoading(false))
     }
 
-    const handleSaveUser = (data: UserDataModel) => {
+    const handleSaveUser = (data: any, isUpdate: boolean) => {
         setLoading(true)
 
-        const action = authenticationService.updateUser(data)
+        let action;
+        if (isUpdate) {
+            action = authenticationService.updateUser(data)
+        } else {
+            action = authenticationService.createInvitation(data)
+        }
 
         action
             .then(() => {
+                if (isUpdate) {
+                    setSnackbarMsg('Usuário atualizado com sucesso!')
+                } else {
+                    setSnackbarMsg('Convite enviado com sucesso!')
+                }
+                setSnackbarSuccessOpen(true)
                 return authenticationService.findByClassName(selectedClass)
             })
             .then(fresh => setUsers(fresh))
@@ -137,11 +150,12 @@ const ManageUsers: React.FC = () => {
                 console.error('Erro ao salvar usuário', err)
                 const msg = err.response?.data?.message || err.message || 'Erro ao salvar usuário.'
                 setSnackbarMsg(msg)
-                setSnackbarOpen(true)
+                setSnackbarErrorOpen(true)
             })
             .finally(() => {
                 setLoading(false)
                 setUserModalOpen(false)
+                setLinkModalOpen(false)
             })
     }
 
@@ -189,28 +203,32 @@ const ManageUsers: React.FC = () => {
                                             <td>{u.firstName} {u.lastName}</td>
                                             <td>{u.groupName}</td>
                                             <td className="text-end">
-                                                {u.canModify ? (
+                                                {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.update") ? (
                                                     <>
-                                                        {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.update") && (
+                                                        {u.canModify ? (
                                                             <IconButton title="Editar" onClick={() => handleEditUser(u.id)}>
                                                                 <EditIcon color="primary" />
                                                             </IconButton>
+                                                        ) : (
+                                                            <IconButton style={{ cursor: 'not-allowed' }} className="text-muted" title="Não pode editar este usuário">
+                                                                <EditIcon color="disabled" />
+                                                            </IconButton>
                                                         )}
-                                                        {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.delete") && (
+                                                    </>
+                                                ) : <></>}
+                                                {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.delete") ? (
+                                                    <>
+                                                        {u.canModify ? (
                                                             <IconButton title="Excluir" onClick={() => askDeleteUser(u.id)}>
                                                                 <DeleteIcon color="error" />
-                                                            </IconButton>)}
+                                                            </IconButton>
+                                                        ) : (
+                                                            <IconButton style={{ cursor: 'not-allowed' }} className="text-muted" title="Não pode excluir este usuário">
+                                                                <DeleteIcon color="disabled" />
+                                                            </IconButton>
+                                                        )}
                                                     </>
-                                                ) : (
-                                                    <>
-                                                        <IconButton style={{ cursor: 'not-allowed' }} className="text-muted" title="Não pode excluir este usuário">
-                                                            <EditIcon color="disabled" />
-                                                        </IconButton>
-                                                        <IconButton style={{ cursor: 'not-allowed' }} className="text-muted" title="Não pode excluir este usuário">
-                                                            <DeleteIcon color="disabled" />
-                                                        </IconButton>
-                                                    </>
-                                                )}
+                                                ) : <></>}
                                             </td>
                                         </tr>
                                     ))}
@@ -222,14 +240,30 @@ const ManageUsers: React.FC = () => {
             )}
 
             <Snackbar
-                open={snackbarOpen}
+                open={snackbarErrorOpen}
                 autoHideDuration={3000}
-                onClose={() => setSnackbarOpen(false)}
+                onClose={() => setSnackbarErrorOpen(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <Alert
-                    onClose={() => setSnackbarOpen(false)}
+                    onClose={() => setSnackbarErrorOpen(false)}
                     severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={snackbarSuccessOpen}
+                autoHideDuration={3000}
+                onClose={() => setSnackbarSuccessOpen(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={() => setSnackbarSuccessOpen(false)}
+                    severity="success"
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
@@ -256,10 +290,19 @@ const ManageUsers: React.FC = () => {
                 </DialogActions>
             </Dialog>
 
+            <ModalLinkUser
+                open={linkModalOpen}
+                onClose={() => { setLinkModalOpen(false) }}
+                onSave={data => handleSaveUser(data, false)}
+                allGroups={allGroups}
+                classList={loggedUser?.classList ?? []}
+                initialClass={selectedClass}
+            />
+
             <ModalUserData
                 open={userModalOpen}
                 onClose={() => { setUserModalOpen(false) }}
-                onSave={handleSaveUser}
+                onSave={data => handleSaveUser(data, true)}
                 userData={editingUser}
                 allGroups={allGroups}
             />

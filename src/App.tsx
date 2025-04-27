@@ -15,6 +15,7 @@ import Materias from './pages/Materias'
 import ManageGroups from './pages/ManageGroups'
 import PermissionRoute from './components/PermissionRoute'
 import ManageUsers from './pages/ManageUsers'
+import ConfirmEmail from './pages/ConfirmEmail'
 
 function PublicRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -70,6 +71,7 @@ export default function App() {
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path="/confirm" element={<PublicRoute><ConfirmEmail /></PublicRoute>} />
 
 
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>

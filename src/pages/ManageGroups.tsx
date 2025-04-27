@@ -47,7 +47,7 @@ export default function ManageGroups() {
         setLoading(true)
         try {
             const [grs, perms] = await Promise.all([
-                authenticationService.findAllGroups(),
+                authenticationService.findManagedGroups(),
                 authenticationService.findAllPermissions()
             ])
             setGroups(grs)

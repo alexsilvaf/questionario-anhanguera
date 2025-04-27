@@ -1,8 +1,8 @@
 export interface RegisterModel {
     firstName: string;
     lastName: string;
-    cpf: string;
-    email: string;
-    idCourseClass: number;
+    email?: string;
+    className?: number;
     password: string;
+    token?: string;
 } 

@@ -8,10 +8,16 @@ import { UserGroupCreateUpdateModel } from '../models/UserGroupCreateUpdateModel
 import { UserAuthoritiesModel } from '../models/UserAuthoritiesModel';
 import { ListUserModel } from '../models/ListUserModel';
 import { UserDataModel } from '../models/UserDataModel';
+import { UserAuthenticationModel } from '../models/UserAuthenticationModel';
+import { InviteModel } from '../models/InviteMOdel';
 
 export const getCurrentUser = (): Promise<UserAuthoritiesModel> => {
     return http.get('/user/me', { withCredentials: true })
-    .then(res => res.data);
+        .then(res => res.data);
+};
+
+export const confirmEmail = (token: string) => {
+    return http.post<string, AxiosResponse<string>>('/auth/confirm', token, { headers: { 'Content-Type': 'text/plain' }, withCredentials: true }).then(res => res.data);
 };
 
 export const login = (data: LoginModel) => {
@@ -57,6 +63,24 @@ export const findByClassName = (className: string): Promise<ListUserModel[]> => 
         )
         .then(res => res.data);
 };
+export const getInviteByToken = (token: string): Promise<InviteModel> => {
+    return http
+        .get<InviteModel, AxiosResponse<InviteModel>>(
+            '/user/getinvite/' + token,
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
+
+export const createInvitation = (user: UserAuthenticationModel): Promise<UserAuthenticationModel> => {
+    return http
+        .post<UserAuthenticationModel, AxiosResponse<UserAuthenticationModel>>(
+            '/user/create-invitation',
+            user,
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
 
 export const updateUser = (user: UserDataModel): Promise<UserDataModel> => {
     return http
@@ -81,6 +105,15 @@ export const findAllGroups = (): Promise<UserGroupModel[]> => {
     return http
         .get<UserGroupModel[], AxiosResponse<UserGroupModel[]>>(
             '/auth/group/findall',
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+};
+
+export const findManagedGroups = (): Promise<UserGroupModel[]> => {
+    return http
+        .get<UserGroupModel[], AxiosResponse<UserGroupModel[]>>(
+            '/auth/group/findmanaged',
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -144,6 +177,7 @@ export const deleteGroup = (id: number): Promise<void> => {
 
 const authenticationService = {
     login,
+    confirmEmail,
     register,
     logout,
     getCurrentUser,
@@ -151,9 +185,12 @@ const authenticationService = {
     resetPassword,
     findByClassName,
     findAllGroups,
+    findManagedGroups,
     findAllPermissions,
     findUserById,
     findGroupById,
+    getInviteByToken,
+    createInvitation,
     updateUser,
     updateGroup,
     createGroup,

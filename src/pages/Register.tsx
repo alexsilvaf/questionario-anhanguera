@@ -1,58 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './css/Login.css';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ui-components/ThemeToggle';
-import AppDropdown from '../components/ui-components/AppDropdown';
 import { RegisterModel } from '../models/RegisterModel';
 import authenticationService from '../services/authenticationService';
-import courseService from '../services/courseService'; // ⬅️ novo
-import CpfInput from '../components/ui-components/CpfInput';
-import { CourseModel } from '../models/CourseModel';
+import './css/Login.css';
+import { InviteModel } from '../models/InviteMOdel';
 
 const Register = () => {
     const navigate = useNavigate();
+    const { search } = useLocation();
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [cpf, setCpf] = useState('');
-    const [cursoId, setCursoId] = useState('');
-    const [turmaId, setTurmaId] = useState('');
+    const [groupName, setGroupName] = useState('');
+    const [courseClassName, setCourseClassName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
 
-    const [cursosData, setCursosData] = useState<CourseModel[]>([]); // ⬅️ cursos com turmas
-
     useEffect(() => {
-        const fetchCursos = async () => {
-            try {
-                const response = await courseService.getCourses(); // API call
-                setCursosData(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar cursos', error);
-            }
-        };
+        const params = new URLSearchParams(search);
+        const token = params.get('token');
+        if (!token) {
+            setError('Token de convite não fornecido');
+            return;
+        }
 
-        fetchCursos();
-    }, []);
-
-    const cursoOptions = cursosData.map(c => ({
-        label: c.name,
-        value: String(c.id)
-    }));
-
-    const turmaOptions = cursosData
-        .find(c => String(c.id) === cursoId)
-        ?.courseClassList.map(t => ({
-            label: t.name,
-            value: String(t.id)
-        })) || [];
+        authenticationService
+            .getInviteByToken(token)
+            .then((inv: InviteModel) => {
+                setEmail(inv.email);
+                setGroupName(inv.groupName);
+                setCourseClassName(inv.courseClassName);
+            })
+            .catch(err => {
+                setError(err.response?.data?.message || 'Convite inválido');
+            });
+    }, [search]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!email || !cursoId || !turmaId || !password || !confirmPassword) {
+        if (!email || !password || !confirmPassword) {
             setError('Preencha todos os campos obrigatórios.');
             return;
         }
@@ -65,10 +55,9 @@ const Register = () => {
         const payload: RegisterModel = {
             firstName,
             lastName,
-            cpf,
             email,
-            idCourseClass: parseInt(turmaId),
-            password
+            password,
+            token: new URLSearchParams(search).get('token') || '',
         };
 
         try {
@@ -97,6 +86,28 @@ const Register = () => {
                         <input
                             type="text"
                             className="form-control app-input"
+                            placeholder="Turma"
+                            value={courseClassName}
+                            disabled
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <input
+                            type="email"
+                            className="form-control app-input"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            disabled
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control app-input"
                             placeholder="Nome"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -111,44 +122,6 @@ const Register = () => {
                             placeholder="Sobrenome"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <CpfInput value={cpf} onChange={setCpf} />
-                    </div>
-
-                    <div className="mb-3">
-                        <input
-                            type="email"
-                            className="form-control app-input"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <AppDropdown
-                            placeholder="Curso"
-                            value={cursoId}
-                            onChange={(val) => {
-                                setCursoId(val);
-                                setTurmaId('');
-                            }}
-                            options={cursoOptions}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <AppDropdown
-                            placeholder="Turma"
-                            value={turmaId}
-                            onChange={setTurmaId}
-                            options={turmaOptions}
                             required
                         />
                     </div>
@@ -172,6 +145,16 @@ const Register = () => {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control app-input"
+                            placeholder="Grupo"
+                            value={groupName}
+                            disabled
                         />
                     </div>
 

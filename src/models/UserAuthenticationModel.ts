@@ -1,10 +1,8 @@
 import { UserGroupModel } from "./UserGroupModel";
 
-export type UserDataModel = {
-    id?: number;
-    firstName: string;
-    lastName: string;
+export type UserAuthenticationModel = {
     email: string;
     userGroup: UserGroupModel;
+    courseClassName: string;
   };
   

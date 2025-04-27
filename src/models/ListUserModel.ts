@@ -3,6 +3,6 @@ export type ListUserModel = {
     firstName: string;
     lastName: string;
     groupName: string;
-    canDelete: boolean;
+    canModify: boolean;
   };
   

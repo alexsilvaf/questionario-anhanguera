@@ -7,6 +7,7 @@ import { UserPermissionModel } from '../models/UserPermissionModel';
 import { UserGroupCreateUpdateModel } from '../models/UserGroupCreateUpdateModel';
 import { UserAuthoritiesModel } from '../models/UserAuthoritiesModel';
 import { ListUserModel } from '../models/ListUserModel';
+import { UserDataModel } from '../models/UserDataModel';
 
 export const getCurrentUser = (): Promise<UserAuthoritiesModel> => {
     return http.get('/user/me', { withCredentials: true })
@@ -57,10 +58,20 @@ export const findByClassName = (className: string): Promise<ListUserModel[]> => 
         .then(res => res.data);
 };
 
+export const updateUser = (user: UserDataModel): Promise<UserDataModel> => {
+    return http
+        .put<UserDataModel, AxiosResponse<UserDataModel>>(
+            '/user/update',
+            user,
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
+
 export const deleteUser = (id: number): Promise<void> => {
     return http
         .delete<void, AxiosResponse<void>>(
-            '/user/delete/' + id,
+            '/auth/delete/' + id,
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -79,6 +90,15 @@ export const findAllPermissions = (): Promise<UserPermissionModel[]> => {
     return http
         .get<UserPermissionModel[], AxiosResponse<UserPermissionModel[]>>(
             '/auth/permission/findall',
+            { withCredentials: true }
+        )
+        .then(res => res.data);
+}
+
+export const findUserById = (id: number): Promise<UserDataModel> => {
+    return http
+        .get<UserDataModel, AxiosResponse<UserDataModel>>(
+            '/user/findbyid/' + id,
             { withCredentials: true }
         )
         .then(res => res.data);
@@ -132,7 +152,9 @@ const authenticationService = {
     findByClassName,
     findAllGroups,
     findAllPermissions,
+    findUserById,
     findGroupById,
+    updateUser,
     updateGroup,
     createGroup,
     deleteGroup,

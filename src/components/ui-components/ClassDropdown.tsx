@@ -25,7 +25,7 @@ const ClassDropdown: React.FC<ClassDropdownProps> = ({
     <>
       {classes.length > 1 ? (
         <select
-          className="class-select me-3 mb-1"
+          className="class-select mx-1 my-0"
           value={selectedClass}
           onChange={e => {onSelectClass(e.target.value); setSelectedClass(e.target.value)}}
         >

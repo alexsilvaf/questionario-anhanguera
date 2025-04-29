@@ -73,8 +73,7 @@ const Register = () => {
             <div className="login-card p-4 w-100" style={{ maxWidth: '400px' }}>
                 <div className="text-center mb-4">
                     <div className="d-flex align-items-center justify-content-center mb-2">
-                        <img src="/src/assets/logo.png" alt="Anhanguera Logo" className="mb-2" style={{ width: '64px' }} />
-                        <h1 className="mb-0 logo-text">Anhanguera</h1>
+                        <img src="/src/assets/logo_estudante360.svg" alt="Estudante360 Logo" style={{ width: '64px' }} />
                     </div>
                     <p className="subtitle">Criar Conta</p>
                 </div>

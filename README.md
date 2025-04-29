@@ -1,8 +1,8 @@
-# Questionario Anhanguera
+# Estudante 360
 
 ## Overview
 
-Questionario Anhanguera is a web application built with React, React Router, Vite, Bootstrap, and TypeScript.  
+Estudante 360 is a web application built with React, React Router, Vite, Bootstrap, and TypeScript.  
 The application supports both light and dark themes with a custom gradient cursor effect in dark mode. It includes the following screens:
   - Tela Principal  
   - Matérias  

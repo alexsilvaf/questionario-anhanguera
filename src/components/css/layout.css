@@ -34,6 +34,11 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.header__title {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
 .layout-content {
   flex: 1;
   padding: 1rem;

@@ -19,7 +19,7 @@ import ClassDropdown from '../components/ui-components/ClassDropdown'
 import { UserDataModel } from '../models/UserDataModel'
 import { UserGroupModel } from '../models/UserGroupModel'
 import ModalUserData from './ModalUserData'
-import LinkIcon from '@mui/icons-material/Link'
+import AddLinkIcon from '@mui/icons-material/AddLink'
 import GroupsIcon from '@mui/icons-material/Groups'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -167,7 +167,7 @@ const ManageUsers: React.FC = () => {
                     <ClassDropdown onSelectClass={setSelectedClass} />
                     {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.User.create") && (
                         <IconButton title="Novo Usuário" className="mx-1" onClick={() => handleNewUser()}>
-                            <LinkIcon color="primary" />
+                            <AddLinkIcon color="primary" />
                         </IconButton>
                     )}
                     {loggedUser?.authorities?.some(a => a.authority === "Estudante360Permissions.Group.findAll") && (

@@ -56,9 +56,11 @@ export default function Nav() {
   return (
     <>
       <div className='d-flex flex-column sidebar'>
-        <div className="d-flex justify-content-center align-items-center">
-          <img src="/src/assets/logo.png" alt="Logo" width={'70px'} />
-          <div className="logo-text header__title fw-bold fs-4">Anhanguera</div>
+        <div className="d-flex justify-content-between align-items-center px-3" style={{ height: '75px' }}>
+          <img src="/src/assets/logo_estudante360.svg" alt="Estudante360 Logo" style={{ width: '45px' }} />
+          <div className="">
+            <span className="logo-text header__title fw-bold">Estudante 360</span>
+          </div>
         </div>
 
         <nav className="d-flex flex-column h-100">

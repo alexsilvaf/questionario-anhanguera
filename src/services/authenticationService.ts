@@ -9,7 +9,7 @@ import { UserAuthoritiesModel } from '../models/UserAuthoritiesModel';
 import { ListUserModel } from '../models/ListUserModel';
 import { UserDataModel } from '../models/UserDataModel';
 import { UserAuthenticationModel } from '../models/UserAuthenticationModel';
-import { InviteModel } from '../models/InviteMOdel';
+import { InviteModel } from '../models/InviteModel';
 
 export const getCurrentUser = (): Promise<UserAuthoritiesModel> => {
     return http.get('/user/me', { withCredentials: true })

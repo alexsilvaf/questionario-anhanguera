@@ -4,7 +4,7 @@ import ThemeToggle from '../components/ui-components/ThemeToggle';
 import { RegisterModel } from '../models/RegisterModel';
 import authenticationService from '../services/authenticationService';
 import './css/Login.css';
-import { InviteModel } from '../models/InviteMOdel';
+import { InviteModel } from '../models/InviteModel';
 
 const Register = () => {
     const navigate = useNavigate();

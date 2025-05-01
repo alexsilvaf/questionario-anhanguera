@@ -1,5 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 interface NavItem {
   to: string;
@@ -94,13 +96,10 @@ export default function Nav() {
               </li>
             ))}
             <li>
-              <button
-              onClick={handleLogout}
-              className="btn d-flex align-items-center text-decoration-none w-100"
-              >
-                  <i className="material-icons primary-color me-3">logout</i>
-                  Sair
-              </button>
+              <Button className="w-100 justify-content-start" onClick={handleLogout}>
+                <LogoutIcon color="primary" className="me-3" />
+                Sair
+              </Button>
             </li>
           </ul>
         </nav>

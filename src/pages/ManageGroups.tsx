@@ -29,12 +29,14 @@ export default function ManageGroups() {
     const [allPermissions, setAllPermissions] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const [snackbarMsg, setSnackbarMsg] = useState('')
+    const [snackbarType, setSnackbarType] = useState<'success' | 'error'>('success')
 
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [groupToDelete, setGroupToDelete] = useState<number | null>(null)
 
-    const [snackbarOpen, setSnackbarOpen] = useState(false)
-    const [snackbarMsg, setSnackbarMsg] = useState('')
 
     const [formOpen, setFormOpen] = useState(false)
     const [editingGroup, setEditingGroup] = useState<UserGroupModel | undefined>(undefined)
@@ -72,6 +74,9 @@ export default function ManageGroups() {
         try {
             await authenticationService.deleteGroup(groupToDelete)
             setGroups(prev => prev.filter(g => g.id !== groupToDelete))
+            setSnackbarMsg('Grupo excluído com sucesso.')
+            setSnackbarType('success')
+            setSnackbarOpen(true)
         } catch (err: any) {
             console.error(err)
             const msg =
@@ -79,6 +84,7 @@ export default function ManageGroups() {
                 || err.message
                 || 'Erro ao excluir.'
             setSnackbarMsg(msg)
+            setSnackbarType('error')
             setSnackbarOpen(true)
         } finally {
             setLoading(false)
@@ -111,9 +117,15 @@ export default function ManageGroups() {
                 await authenticationService.createGroup(data)
             }
             await loadData()
+            setSnackbarMsg('Grupo salvo com sucesso.')
+            setSnackbarType('success')
+            setSnackbarOpen(true)
         } catch (err: any) {
             console.error(err)
-            setError(err.message || 'Erro ao salvar.')
+            const msg = err.response?.data?.message || err.message || 'Erro ao salvar.'
+            setSnackbarMsg(msg)
+            setSnackbarType('error')
+            setSnackbarOpen(true)
         } finally {
             setLoading(false)
         }
@@ -195,7 +207,7 @@ export default function ManageGroups() {
             >
                 <Alert
                     onClose={() => setSnackbarOpen(false)}
-                    severity="error"
+                    severity={snackbarType}
                     variant="filled"
                     sx={{ width: '100%' }}
                 >

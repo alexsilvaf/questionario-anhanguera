@@ -182,7 +182,7 @@ export default function ModalGroup({
       }
     }}>
       <DialogTitle>
-        {isEdit ? 'Editar Grupo' : 'Criar Grupo'}
+        {isEdit ? 'Editar' : 'Criar'} Grupo
       </DialogTitle>
       <DialogContent dividers>
         <Box mb={2}>
